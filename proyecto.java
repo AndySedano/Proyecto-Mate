@@ -5,7 +5,11 @@ public class proyecto {
 	public static void main (String[] args){
 		Scanner leer = new Scanner(System.in);
 		ArrayList<String> evaluaciones = new ArrayList<String>();
-		String estados = leer.nextLine();
+		ArrayList<Estado> estados = new ArrayList<Estado>();
+		String[] estadosL = leer.nextLine().split(",");
+		for (int i = 0; i<estadosL.length; i++){
+			Integer.parseInt(estadosL[i]);
+		}
 		String alfabeto = leer.nextLine();
 		String estadoInicial = leer.nextLine();
 		String estadosFinales = leer.nextLine();
