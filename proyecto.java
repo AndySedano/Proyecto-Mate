@@ -1,27 +1,49 @@
 import java.util.Scanner;
+import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class proyecto {
 	public static void main (String[] args){
 		Scanner leer = new Scanner(System.in);
-		ArrayList<String> evaluaciones = new ArrayList<String>();
-		ArrayList<Estado> estados = new ArrayList<Estado>();
-		String[] estadosL = leer.nextLine().split(",");
-		for (int i = 0; i<estadosL.length; i++){
-			Integer.parseInt(estadosL[i]);
+
+		String[] estados = leer.nextLine().split(",");//Lista de estados del automata
+		String[] auxAlf = leer.nextLine().split(",");//alfabeto auxiliar para meterlo en un ArrayList
+
+		ArrayList<Character> alfabeto = new ArrayList<Character>();//ArrayList del alfabeto
+		//Para llenar el alfabeto
+		for(String i : auxAlf){
+			alfabeto.add(i.charAt(0));
 		}
-		String alfabeto = leer.nextLine();
-		String estadoInicial = leer.nextLine();
-		String estadosFinales = leer.nextLine();
+
+		int nEstados = estados.length;//numero de estados
+		int nCaracteres = alfabeto.size();//numero de caracteres
+
+		LinkedList<Integer>[][] tablaEstados = new LinkedList[nEstados][nCaracteres];//tabla de estados
+
+		String estadoInicial = leer.nextLine();// El estado inicial
+		String[] estadosFinales = leer.nextLine().split(",");//Los estados finales
+
+		String[] aux;
+		int estadoActual;
+		int charActual;
 		while(leer.hasNext()){
-			evaluaciones.add(leer.nextLine());
+			aux = leer.nextLine().split(",");
+			estadoActual = Character.getNumericValue(aux[0].charAt(1));
+			charActual = alfabeto.indexOf(aux[1].charAt(0));
+			System.out.println(aux[1].charAt(4));
+			int uli = Character.getNumericValue(aux[1].charAt(4));
+			tablaEstados[estadoActual][charActual].add(uli);
+			for(int i=2; i<aux.length;i++){
+				System.out.println(aux[i].charAt(4));
+				//tablaEstados[estadoActual][charActual].add(Character.getNumericValue(aux[i].charAt(1)));
+			}
 		}
-		System.out.println("estados: " + estados);
-		System.out.println("alfabeto: " + alfabeto);
-		System.out.println("estadosFinales: " + estadosFinales);
-		System.out.println("estadoInicial: " + estadoInicial);
-		for(int i = 0; i<evaluaciones.size(); i++){
-			System.out.println("funcion de transicion: " + i + evaluaciones.get(i));
+
+		for (int i=0; i<nEstados;i++){
+			for (int j=0; i<nCaracteres;j++){
+				System.out.println(tablaEstados[i][j].toArray().toString());
+			}
 		}
 	}
 }
