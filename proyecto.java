@@ -21,6 +21,11 @@ public class proyecto {
 
 		LinkedList<Integer>[][] tablaEstados = new LinkedList[nEstados][nCaracteres];//tabla de estados
 
+		for(int i=0;i<nEstados;i++){
+			for(int j=0; j<nCaracteres; j++){
+				tablaEstados[i][j] = new LinkedList<Integer>();
+			}
+		}
 		String estadoInicial = leer.nextLine();// El estado inicial
 		String[] estadosFinales = leer.nextLine().split(",");//Los estados finales
 
@@ -31,18 +36,18 @@ public class proyecto {
 			aux = leer.nextLine().split(",");
 			estadoActual = Character.getNumericValue(aux[0].charAt(1));
 			charActual = alfabeto.indexOf(aux[1].charAt(0));
-			System.out.println(aux[1].charAt(4));
 			int uli = Character.getNumericValue(aux[1].charAt(4));
 			tablaEstados[estadoActual][charActual].add(uli);
 			for(int i=2; i<aux.length;i++){
-				System.out.println(aux[i].charAt(4));
-				//tablaEstados[estadoActual][charActual].add(Character.getNumericValue(aux[i].charAt(1)));
+				tablaEstados[estadoActual][charActual].add(Character.getNumericValue(aux[i].charAt(1)));
 			}
 		}
 
 		for (int i=0; i<nEstados;i++){
-			for (int j=0; i<nCaracteres;j++){
-				System.out.println(tablaEstados[i][j].toArray().toString());
+			System.out.println("Estado q" + i);
+			for (int j=0; j<nCaracteres;j++){
+				System.out.println("Con caracter en: " + j);
+				System.out.println(Arrays.toString(tablaEstados[i][j].toArray()));
 			}
 		}
 	}
