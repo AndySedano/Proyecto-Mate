@@ -54,34 +54,53 @@ public class proyecto {
 			}
 		}
 		*/
+		
+		
+		HashMap<Estado,Estado[]> tablaAFD = crearGrafo(tablaEstados, alfabeto);
+		for(Estado e : tablaAFD.keySet()){
+			int key = e.id;
+			System.out.println(e.id);
+			Estado[] eds = tablaAFD.get(e);
+			for(Estado e2 : eds){
+				if(e2 != null)
+					System.out.println(e2.id);
+			}
+		}
+		
 	}
 	
-	public void crearGrafo( LinkedList<Integer>[][] tablaEstados , ArrayList<Character> alfabeto ){
+	public static HashMap<Estado,Estado[]> crearGrafo( LinkedList<Integer>[][] tablaEstados , ArrayList<Character> alfabeto ){
 
 		//la llave son los estados y los valores es un arreglo de estados a los que llegas con
 		//cada caracter
-		HashMap<Estado,Estado[]> = new HashMap<Estado,Estado[]>();
+		HashMap<Estado,Estado[]> tablaAFD = new HashMap<Estado,Estado[]>();
 
 
 
 		Estado q0 = new Estado(0);
 		q0.agregarEstado(0);
-		estados.add(q0);
+		tablaAFD.put(q0, new Estado[alfabeto.size()] );
 		
 		int i=1;
 		for( Character c : alfabeto ){
 			ArrayList<Integer> temp = funcionTransicion(q0,alfabeto.indexOf(c), tablaEstados);
 			Estado e = new Estado(i, temp);
-
+			
+			Estado[] uli = tablaAFD.get(q0);
+			uli[alfabeto.indexOf(c)] = e;
+			
+			tablaAFD.put(e, new Estado[alfabeto.size()] );
 			
 			i++;
 		}
+		
+		return tablaAFD;
 	}
 	
-	public ArrayList<Integer> funcionTransicion(Estado e, int caracter , LinkedList<Integer>[][] tablaEstados){
+	public static ArrayList<Integer> funcionTransicion(Estado e, int caracter , LinkedList<Integer>[][] tablaEstados){
 		ArrayList<Integer> estadosDondeLlega = new ArrayList<Integer>();
 		
-		for(Integer i : e.getEstados){
+		for(Integer i : e.getEstados()){
 				estadosDondeLlega.addAll(tablaEstados[i][caracter]);
 		}
 		
