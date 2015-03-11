@@ -21,11 +21,6 @@ public class proyecto {
 
 		LinkedList<Integer>[][] tablaEstados = new LinkedList[nEstados][nCaracteres];//tabla de estados
 
-		for(int i=0;i<nEstados;i++){
-			for(int j=0; j<nCaracteres; j++){
-				tablaEstados[i][j] = new LinkedList<Integer>();
-			}
-		}
 		String estadoInicial = leer.nextLine();// El estado inicial
 		String[] estadosFinales = leer.nextLine().split(",");//Los estados finales
 
@@ -37,6 +32,11 @@ public class proyecto {
 			estadoActual = Character.getNumericValue(aux[0].charAt(1));
 			charActual = alfabeto.indexOf(aux[1].charAt(0));
 			int uli = Character.getNumericValue(aux[1].charAt(4));
+			
+			if(tablaEstados[estadoActual][charActual]==null){
+				tablaEstados[estadoActual][charActual]=new LinkedList<Integer>();
+			}
+			
 			tablaEstados[estadoActual][charActual].add(uli);
 			for(int i=2; i<aux.length;i++){
 				tablaEstados[estadoActual][charActual].add(Character.getNumericValue(aux[i].charAt(1)));
