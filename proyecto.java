@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class proyecto {
 	public static void main (String[] args){
@@ -53,5 +54,37 @@ public class proyecto {
 			}
 		}
 		*/
+	}
+	
+	public void crearGrafo( LinkedList<Integer>[][] tablaEstados , ArrayList<Character> alfabeto ){
+
+		//la llave son los estados y los valores es un arreglo de estados a los que llegas con
+		//cada caracter
+		HashMap<Estado,Estado[]> = new HashMap<Estado,Estado[]>();
+
+
+
+		Estado q0 = new Estado(0);
+		q0.agregarEstado(0);
+		estados.add(q0);
+		
+		int i=1;
+		for( Character c : alfabeto ){
+			ArrayList<Integer> temp = funcionTransicion(q0,alfabeto.indexOf(c), tablaEstados);
+			Estado e = new Estado(i, temp);
+
+			
+			i++;
+		}
+	}
+	
+	public ArrayList<Integer> funcionTransicion(Estado e, int caracter , LinkedList<Integer>[][] tablaEstados){
+		ArrayList<Integer> estadosDondeLlega = new ArrayList<Integer>();
+		
+		for(Integer i : e.getEstados){
+				estadosDondeLlega.addAll(tablaEstados[i][caracter]);
+		}
+		
+		return estadosDondeLlega;
 	}
 }
