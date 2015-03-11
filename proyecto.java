@@ -43,6 +43,8 @@ public class proyecto {
 			}
 		}
 
+		
+		/* Imprimir antiguo
 		for (int i=0; i<nEstados;i++){
 			System.out.println("Estado q" + i);
 			for (int j=0; j<nCaracteres;j++){
@@ -50,5 +52,6 @@ public class proyecto {
 				System.out.println(Arrays.toString(tablaEstados[i][j].toArray()));
 			}
 		}
+		*/
 	}
 }
