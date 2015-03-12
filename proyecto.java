@@ -61,9 +61,18 @@ public class proyecto {
 		Stack<Estado> pila = new Stack<Estado>();
 		pila.push(q0);
 		
+		//Meter en la pila los estados, sacarlos y aplicar la funcionTrans
+		//lo que salga de la funcionTrnas se va a la pila, y el estado evaluado
+		//se va a la lista de estados
+		
+		//Hay que verificar que a la pila no metamos un estado "copia" que ya exista en la
+		//lista de estados aprobados
+		
 		while(! pila.empty()){
 			
+			Estado temp = pila.pop();
 			
+			//Checar la función de transición por cada uno de los subesttados de temp
 			
 			estadosAFD.add(q0);
 		}
