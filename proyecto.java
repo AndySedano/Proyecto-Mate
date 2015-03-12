@@ -5,13 +5,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class proyecto {
+
+	static ArrayList<Estado> estadosAFD = new ArrayList<Estado>();
+	static ArrayList<Character> alfabeto = new ArrayList<Character>();//ArrayList del alfabeto
+	static LinkedList<Integer>[][] tablaEstados;//tabla de estados
+
+
 	public static void main (String[] args){
 		Scanner leer = new Scanner(System.in);
 
 		String[] estados = leer.nextLine().split(",");//Lista de estados del automata
 		String[] auxAlf = leer.nextLine().split(",");//alfabeto auxiliar para meterlo en un ArrayList
 
-		ArrayList<Character> alfabeto = new ArrayList<Character>();//ArrayList del alfabeto
+		
 		//Para llenar el alfabeto
 		for(String i : auxAlf){
 			alfabeto.add(i.charAt(0));
@@ -20,7 +26,7 @@ public class proyecto {
 		int nEstados = estados.length;//numero de estados
 		int nCaracteres = alfabeto.size();//numero de caracteres
 
-		LinkedList<Integer>[][] tablaEstados = new LinkedList[nEstados][nCaracteres];//tabla de estados
+		tablaEstados = new LinkedList[nEstados][nCaracteres];
 
 		String estadoInicial = leer.nextLine();// El estado inicial
 		String[] estadosFinales = leer.nextLine().split(",");//Los estados finales
@@ -44,6 +50,7 @@ public class proyecto {
 			}
 		}
 
+
 		
 		/* Imprimir antiguo
 		for (int i=0; i<nEstados;i++){
@@ -53,7 +60,6 @@ public class proyecto {
 				System.out.println(Arrays.toString(tablaEstados[i][j].toArray()));
 			}
 		}
-		*/
 		
 		
 		HashMap<Estado,Estado[]> tablaAFD = crearGrafo(tablaEstados, alfabeto);
@@ -65,10 +71,44 @@ public class proyecto {
 				if(e2 != null)
 					System.out.println(e2.id);
 			}
+		}*/
+		Estado q0 = new Estado(0, alfabeto);
+		q0.agregarSubEstado(0);
+
+		for(Character c : alfabeto){
+			calcularConexion(c,q0);
 		}
 		
+
+
+
+		
+	}//Fin del main
+
+
+
+	public static Estado calcularConexion(Character c, Estado e){
+		Estado aux = new Estado(-1, alfabeto);//Nuevo estado auxiliar para saber si el estado(con todo y subestados) ya existe en la tabla de estadosAFD
+
+		for(int sub : e.getSubEstados()){//Para todos los subestados del estado
+			for(int subEstado : tablaEstados[sub][alfabeto.indexOf(c)]){
+				if (!aux.getSubEstados().contains(subEstado)){
+					aux.agregarSubEstado(subEstado);
+				}
+			}
+		}
+
+		for (Estado eAFD : estadosAFD){//Por todos los estados en el afd
+			if (eAFD.comparar(aux)){//Checa si alguno es igual a aux
+				return eAFD;// si si regresa ese estado
+			}
+		}
+		Estado nuevoE = new Estado((estadosAFD.size()-1), aux.getSubEstados() , alfabeto);
+		return nuevoE;//si no regresa un nuevo estado con los subestados de aux
 	}
-	
+
+
+	/*
 	public static HashMap<Estado,Estado[]> crearGrafo( LinkedList<Integer>[][] tablaEstados , ArrayList<Character> alfabeto ){
 
 		//la llave son los estados y los valores es un arreglo de estados a los que llegas con
@@ -108,4 +148,5 @@ public class proyecto {
 		
 		return estadosDondeLlega;
 	}
-}
+	*/
+}//Fin de la clase
