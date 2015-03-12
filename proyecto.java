@@ -76,7 +76,9 @@ public class proyecto {
 		HashMap<Estado,Estado[]> tablaAFD = new HashMap<Estado,Estado[]>();
 
 
-
+		//Aqui Solo esta haciendo la vie en rose para q0
+		//hay que poner todo en un do{}while(); super feliz
+		//Atte. U
 		Estado q0 = new Estado(0);
 		q0.agregarEstado(0);
 		tablaAFD.put(q0, new Estado[alfabeto.size()] );
