@@ -42,4 +42,19 @@ public class Estado {
 		tabla.put(u,e);
 		//si la llave u a existe entonces reemplaza la vie en rose
 	}
+	
+	private boolean comparar(Estado otro){
+		if(otro.subEstados.size() == this.subEstados.size()){
+			for(Integer uli : otro.subEstados){
+				if( ! this.subEstados.contains( uli )){
+					return false;
+				}
+			}
+			
+			return true;
+			
+		}else{
+			return false;
+		}
+	}
 }
