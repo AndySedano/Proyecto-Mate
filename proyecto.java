@@ -3,9 +3,9 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class proyecto {
-
 	static ArrayList<Estado> estadosAFD = new ArrayList<Estado>();
 	static ArrayList<Character> alfabeto = new ArrayList<Character>();//ArrayList del alfabeto
 	static LinkedList<Integer>[][] tablaEstados;//tabla de estados
@@ -50,49 +50,35 @@ public class proyecto {
 			}
 		}
 
-
-		
-		/* Imprimir antiguo
-		for (int i=0; i<nEstados;i++){
-			System.out.println("Estado q" + i);
-			for (int j=0; j<nCaracteres;j++){
-				System.out.println("Con caracter en: " + j);
-				System.out.println(Arrays.toString(tablaEstados[i][j].toArray()));
-			}
-		}
-		
-		
-		HashMap<Estado,Estado[]> tablaAFD = crearGrafo(tablaEstados, alfabeto);
-		for(Estado e : tablaAFD.keySet()){
-			int key = e.id;
-			System.out.println(e.id);
-			Estado[] eds = tablaAFD.get(e);
-			for(Estado e2 : eds){
-				if(e2 != null)
-					System.out.println(e2.id);
-			}
-		}*/
 		Estado q0 = new Estado(0, alfabeto);
 		q0.agregarSubEstado(0);
 
 		for(Character c : alfabeto){
-			calcularConexion(c,q0);
+			Estado e = calcularConexion(c,q0);
+			q0.insertarEstado(c,e);
+		}
+				
+		Stack<Estado> pila = new Stack<Estado>();
+		pila.push(q0);
+		
+		while(! pila.empty()){
+			
+			
+			
+			estadosAFD.add(q0);
 		}
 		
-
-
-
+		imprimir();
+		
 		
 	}//Fin del main
-
-
 
 	public static Estado calcularConexion(Character c, Estado e){
 		Estado aux = new Estado(-1, alfabeto);//Nuevo estado auxiliar para saber si el estado(con todo y subestados) ya existe en la tabla de estadosAFD
 
 		for(int sub : e.getSubEstados()){//Para todos los subestados del estado
 			for(int subEstado : tablaEstados[sub][alfabeto.indexOf(c)]){
-				if (!aux.getSubEstados().contains(subEstado)){
+				if (! aux.getSubEstados().contains(subEstado)){
 					aux.agregarSubEstado(subEstado);
 				}
 			}
@@ -112,47 +98,4 @@ public class proyecto {
 			e.imprimir();
 		}
 	}
-
-
-	/*
-	public static HashMap<Estado,Estado[]> crearGrafo( LinkedList<Integer>[][] tablaEstados , ArrayList<Character> alfabeto ){
-
-		//la llave son los estados y los valores es un arreglo de estados a los que llegas con
-		//cada caracter
-		HashMap<Estado,Estado[]> tablaAFD = new HashMap<Estado,Estado[]>();
-
-
-		//Aqui Solo esta haciendo la vie en rose para q0
-		//hay que poner todo en un do{}while(); super feliz
-		//Atte. U
-		Estado q0 = new Estado(0);
-		q0.agregarEstado(0);
-		tablaAFD.put(q0, new Estado[alfabeto.size()] );
-		
-		int i=1;
-		for( Character c : alfabeto ){
-			ArrayList<Integer> temp = funcionTransicion(q0,alfabeto.indexOf(c), tablaEstados);
-			Estado e = new Estado(i, temp);
-			
-			Estado[] uli = tablaAFD.get(q0);
-			uli[alfabeto.indexOf(c)] = e;
-			
-			tablaAFD.put(e, new Estado[alfabeto.size()] );
-			
-			i++;
-		}
-		
-		return tablaAFD;
-	}
-	
-	public static ArrayList<Integer> funcionTransicion(Estado e, int caracter , LinkedList<Integer>[][] tablaEstados){
-		ArrayList<Integer> estadosDondeLlega = new ArrayList<Integer>();
-		
-		for(Integer i : e.getEstados()){
-				estadosDondeLlega.addAll(tablaEstados[i][caracter]);
-		}
-		
-		return estadosDondeLlega;
-	}
-	*/
 }//Fin de la clase
