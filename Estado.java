@@ -43,7 +43,7 @@ public class Estado {
 		//si la llave u a existe entonces reemplaza la vie en rose
 	}
 	
-	private boolean comparar(Estado otro){
+	public boolean comparar(Estado otro){
 		if(otro.subEstados.size() == this.subEstados.size()){
 			for(Integer uli : otro.subEstados){
 				if( ! this.subEstados.contains( uli )){
@@ -51,7 +51,7 @@ public class Estado {
 				}
 			}
 			
-			return true;
+			return true;//true si iguales
 			
 		}else{
 			return false;
