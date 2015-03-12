@@ -107,6 +107,12 @@ public class proyecto {
 		return nuevoE;//si no regresa un nuevo estado con los subestados de aux
 	}
 
+	public static void imprimir(){
+		for (Estado e : estadosAFD){
+			e.imprimir();
+		}
+	}
+
 
 	/*
 	public static HashMap<Estado,Estado[]> crearGrafo( LinkedList<Integer>[][] tablaEstados , ArrayList<Character> alfabeto ){

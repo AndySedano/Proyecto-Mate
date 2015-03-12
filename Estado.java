@@ -57,4 +57,14 @@ public class Estado {
 			return false;
 		}
 	}
+
+	public void imprimir(){
+		System.out.println("El estado " + id + "se conecta:");
+		for (Character c: tabla.keySet()){
+			System.out.println("Con " + c + "con:");
+			for(int i : tabla.get(c).getSubEstados()){
+				System.out.print(i + ", ");
+			} 
+        }
+	}
 }
