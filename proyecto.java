@@ -50,35 +50,45 @@ public class proyecto {
 			}
 		}
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INICIO
+
 		Estado q0 = new Estado(0, alfabeto);
 		q0.agregarSubEstado(0);
 
+		/*
+		Según uli esto ya no va por que al agregarlo a la
+		pila después se va a revisar todo y panes
+		
+		
 		for(Character c : alfabeto){
 			Estado e = calcularConexion(c,q0);
 			q0.insertarEstado(c,e);
 		}
-				
+		*/
+		
 		Stack<Estado> pila = new Stack<Estado>();
 		pila.push(q0);
-		
-		//Meter en la pila los estados, sacarlos y aplicar la funcionTrans
-		//lo que salga de la funcionTrnas se va a la pila, y el estado evaluado
-		//se va a la lista de estados
-		
-		//Hay que verificar que a la pila no metamos un estado "copia" que ya exista en la
-		//lista de estados aprobados
 		
 		while(! pila.empty()){
 			
 			Estado temp = pila.pop();
 			
 			//Checar la función de transición por cada uno de los subesttados de temp
+			for(Character c : alfabeto){
+				Estado link = calcularConexion(c,temp);
+				temp.insertarEstado(c,link);
+			}
 			
-			estadosAFD.add(q0);
+			//Esto aún no está listo
+			if( !(pila.contains(temp) && estadosAFD.cotains(temp))){
+				
+				estadosAFD.add(temp);
+			}
 		}
 		
 		imprimir();
 		
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN
 		
 	}//Fin del main
 
