@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class proyecto {
+public class Principal {
 	static ArrayList<Estado> estadosAFD = new ArrayList<Estado>();
 	static ArrayList<Character> alfabeto = new ArrayList<Character>();//ArrayList del alfabeto
 	static LinkedList<Integer>[][] tablaEstados;//tabla de estados
