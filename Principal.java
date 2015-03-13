@@ -1,3 +1,10 @@
+/**
+*Clase principal del Proyecto final: Primera Parte
+*@author: Andrés Eugenio Sedano Casanova A00399842
+*@author: Ulises Torner Campuzano A01333456
+*@version: 13/03/2015/A
+*/
+
 import java.util.Scanner;
 import java.util.LinkedList;
 import java.util.ArrayList;
