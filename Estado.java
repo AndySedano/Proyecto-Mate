@@ -38,7 +38,7 @@ public class Estado {
 		}
 	}
 	
-	private void insertarEstado(Character u, Estado e){
+	public void insertarEstado(Character u, Estado e){
 		tabla.put(u,e);
 		//si la llave u a existe entonces reemplaza la vie en rose
 	}

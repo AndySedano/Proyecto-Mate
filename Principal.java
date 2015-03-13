@@ -79,8 +79,10 @@ public class Principal {
 				temp.insertarEstado(c,link);
 			}
 			
-			//Esto aún no está listo
-			if( !(pila.contains(temp) && estadosAFD.cotains(temp))){
+			//Esto aún no está listo en lugar de contains debe revisar si
+			//tiene un estado con los mismos subestados que el otro
+			//creo también faltan conexiones entre estados
+			if( !(pila.contains(temp) && estadosAFD.contains(temp)) ){
 				
 				estadosAFD.add(temp);
 			}
@@ -89,6 +91,10 @@ public class Principal {
 		imprimir();
 		
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN
+
+		//Falta agregar un método que reciba los estados y regrese o imprima la tabla del AFD
+	
+		//Falta un método que minimice al AFD
 		
 	}//Fin del main
 
