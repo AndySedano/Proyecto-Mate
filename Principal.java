@@ -5,6 +5,7 @@
 *@version: 13/03/2015/A
 */
 
+//Imports
 import java.util.Scanner;
 import java.util.LinkedList;
 import java.util.ArrayList;
@@ -13,17 +14,16 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class Principal {
-	static ArrayList<Estado> estadosAFD = new ArrayList<Estado>();
+	//Atributos públicos de la clase
+	static ArrayList<Estado> estadosAFD = new ArrayList<Estado>();//Estados del AFD
 	static ArrayList<Character> alfabeto = new ArrayList<Character>();//ArrayList del alfabeto
-	static LinkedList<Integer>[][] tablaEstados;//tabla de estados
-
+	static LinkedList<Integer>[][] tablaEstados;//tabla de estados del AFND
 
 	public static void main (String[] args){
 		Scanner leer = new Scanner(System.in);
 
 		String[] estados = leer.nextLine().split(",");//Lista de estados del automata
 		String[] auxAlf = leer.nextLine().split(",");//alfabeto auxiliar para meterlo en un ArrayList
-
 		
 		//Para llenar el alfabeto
 		for(String i : auxAlf){
@@ -57,7 +57,7 @@ public class Principal {
 			}
 		}
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INICIO
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INICIO DE LA TRANSFORMACIÓN AFND->AFD
 
 		Estado q0 = new Estado(0, alfabeto);
 		q0.agregarSubEstado(0);
@@ -65,7 +65,6 @@ public class Principal {
 		/*
 		Según uli esto ya no va por que al agregarlo a la
 		pila después se va a revisar todo y panes
-		
 		
 		for(Character c : alfabeto){
 			Estado e = calcularConexion(c,q0);
@@ -80,7 +79,7 @@ public class Principal {
 			
 			Estado temp = pila.pop();
 			
-			//Checar la función de transición por cada uno de los subesttados de temp
+			//Checar la función de transición por cada uno de los sub-estados de temp
 			for(Character c : alfabeto){
 				Estado link = calcularConexion(c,temp);
 				temp.insertarEstado(c,link);
@@ -97,14 +96,28 @@ public class Principal {
 		
 		imprimir();
 		
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN DE LA TRANSFORMACIÓN AFND->AFD
 
-		//Falta agregar un método que reciba los estados y regrese o imprima la tabla del AFD
-	
-		//Falta un método que minimice al AFD
+		//>>>>>>>>>>>>>>>>>Falta agregar un método que reciba los estados y regrese o imprima la tabla del AFD
+		String[][] tabla = tablaAFD();
+		for(){
+			for(){
+				System.out.print(tabla[i][j] + " ");
+			}
+			System.out.print("\n");
+		}
+		//>>>>>>>>>>>>>>>>>Falta un método que minimice al AFD
 		
 	}//Fin del main
-
+	
+	//Métodos de la Clase
+	
+	/*
+	*Método calcularConexion, usa la función de transición para calcular los sub-estados a los cuales se conecta un estado dado
+	*@param: c - el caracter del alfabeto por el cual se da la transición
+	*@param: e - el estado desde el cual se calculará la función de transición
+	*@return: regresa un estado del AFD con sus sub-estados del cual se conecta "e" con la transición por medio de "c"
+	*/
 	public static Estado calcularConexion(Character c, Estado e){
 		Estado aux = new Estado(-1, alfabeto);//Nuevo estado auxiliar para saber si el estado(con todo y subestados) ya existe en la tabla de estadosAFD
 
@@ -123,11 +136,25 @@ public class Principal {
 		}
 		Estado nuevoE = new Estado((estadosAFD.size()-1), aux.getSubEstados() , alfabeto);
 		return nuevoE;//si no regresa un nuevo estado con los subestados de aux
-	}
+	}//Fin de calcularConexion
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INICIO
+	/**
+	*Metodo que regresa la tabla de AFD a partir de los estados
+	*@return: arreglo de strings
+	*/
+	public static String[][] tablaAFD(){
+		
+	}
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN	
+	
+	/*
+	*Método imprimir, manda a llamar a Estado.imprimir() por cada Estado del AFD
+	*/
 	public static void imprimir(){
 		for (Estado e : estadosAFD){
 			e.imprimir();
 		}
-	}
+	}//Fin de imprimir
+	
 }//Fin de la clase
