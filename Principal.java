@@ -144,7 +144,58 @@ public class Principal {
 	*@return: arreglo de strings
 	*/
 	public static String[][] tablaAFD(){
+		String[][] tablita = new String[estadosAFD.size()][alfabeto.size()];
+		int i,j;
+		i = 1;
+		for(Character chachacha : alfabeto ){
+			tablita[0][i] = chachacha;
+			i++;
+		}
+		i = 1;//reset el valor del índice
+		for( Estado est : estadosAFD){
+			tablita[i][0] = est.id;
+			i++;
+		}
 		
+		//Esta parte está bien complicada :(
+		for(i=1; i<estadosAFD.size()-1; i++){
+			for(int j=1; j<alfabeto.size()-1; j++){
+				if( buscarEstado(tablita[i][0]) != null ){//Este if es como de seguridad añadida, pero en la vida real siempre debería existir el estado
+
+					buscarEstado(tablita[i][0]).getTransiciones()
+					
+					tablita[i][j] = 
+				}
+			}
+		}
+	
+	}
+	
+	/*
+	Hay que ordenar los estados por id en la lista estadoAFD para que los imprima bonito
+	Si no en la tabla va a estar todo patatas :(
+	Ejemplo:
+				a	b	c	d
+		q5		q2	/	/	/
+		q2		q1	q2	q2	/
+		q0		q0	q1	q2	q3
+		q3		q4	q5	/	/
+		q4		/	q0	/	/
+		q1		/	q2	q1	q3
+		
+	*/
+	
+	/**
+	*Método para buscar un Estado con base a su id (nombre)
+	*@return: el estado con el id o null en caso de no existir
+	*/
+	public static Estado buscarEstado(int id){
+		for(Estado estadito : estadosAFD){
+			if(estadito.id == id){
+				return estadito;
+			}
+		}
+		return null;
 	}
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN	
 	

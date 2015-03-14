@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class Estado {
 	//Campos de la clase
-	int id;
+	public int id;
 	public boolean esFinal;
 	public boolean esInicial;
 	public ArrayList<Integer> subEstados;
@@ -102,6 +102,23 @@ public class Estado {
 			return false;
 		}
 	}//Fin del método comparar
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INICIO
+	/**
+	*Método para obtener los estados a los que llegas con cada caracter
+	*@return: un arreglo bidimensional donde arriba van los caracteres y abajo los id de los estados
+	*/
+	public char[][] getTransiciones(){
+		char[][] tablis = new char[2][ /*  Ay no sé que poner aquí */ ];
+		for(){
+			tablis[][]=;
+		}
+		return tablis;
+	}
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN		
+	
+	
 
 	/**
 	*Método que imprime las conexiones entre estados
