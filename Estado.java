@@ -71,17 +71,9 @@ public class Estado {
 	*@param: n - el id (número de estado) que posee este sub-estado en el AFND
 	*/
 	public void agregarSubEstado(int n){
-		int bandera = 0;
-		for(Integer i : subEstados){
-			if(Integer.parseInt(i) == n){
-				bandera++;
-			}
-		}
-		//Ya revisa que no se agreguen estados iguales
-		//Deberíamos cambiar este método para que ordene y busque en lugar de
-		//recorrer siempre toda la lista
-		if(bandera == 0){
-			subEstados.add(n);
+		Integer temp = new Integer(n);
+		if( ! subEstados.contains(temp) ){
+			subEstados.add(temp);
 		}
 	}
 	
