@@ -2,7 +2,7 @@
 *Clase principal del Proyecto final: Primera Parte
 *@author: Andrés Eugenio Sedano Casanova A00399842
 *@author: Ulises Torner Campuzano A01333456
-*@version: 13/03/2015/A
+*@version: 17/03/2015/A
 */
 
 //Imports
@@ -138,6 +138,12 @@ public class Principal {
 		return nuevoE;//si no regresa un nuevo estado con los subestados de aux
 	}//Fin de calcularConexion
 
+
+
+
+
+
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INICIO
 	/**
 	*Metodo que regresa la tabla de AFD a partir de los estados
@@ -157,23 +163,10 @@ public class Principal {
 			i++;
 		}
 		
-		//Esta parte está bien complicada :(
-		for(i=1; i<estadosAFD.size()-1; i++){
-			for(int j=1; j<alfabeto.size()-1; j++){
-				if( buscarEstado(tablita[i][0]) != null ){//Este if es como de seguridad añadida, pero en la vida real siempre debería existir el estado
-
-					buscarEstado(tablita[i][0]).getTransiciones()
-					
-					tablita[i][j] = 
-				}
-			}
-		}
-	
-	}
-	
 	/*
 	Hay que ordenar los estados por id en la lista estadoAFD para que los imprima bonito
 	Si no en la tabla va a estar todo patatas :(
+
 	Ejemplo:
 				a	b	c	d
 		q5		q2	/	/	/
@@ -184,6 +177,29 @@ public class Principal {
 		q1		/	q2	q1	q3
 		
 	*/
+	
+		//Esta parte está bien complicada :(
+		for(i=1; i<estadosAFD.size()-1; i++){
+			for(int j=1; j<alfabeto.size()-1; j++){
+				if( buscarEstado(tablita[i][0]) != null ){//Este if es como de seguridad añadida, pero en la vida real siempre debería existir el estado
+
+					buscarEstado(tablita[i][0]).getTransiciones();
+					
+					tablita[i][j] = 
+				}
+			}
+		}
+	}
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN		
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/**
 	*Método para buscar un Estado con base a su id (nombre)
@@ -197,7 +213,6 @@ public class Principal {
 		}
 		return null;
 	}
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN	
 	
 	/*
 	*Método imprimir, manda a llamar a Estado.imprimir() por cada Estado del AFD

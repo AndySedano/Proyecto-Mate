@@ -6,18 +6,19 @@
 *
 *@author: Andrés Eugenio Sedano Casanova A00399842
 *@author: Ulises Torner Campuzano A01333456
-*@version: 13/03/2015/A
+*@version: 17/03/2015/A
 */
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Estado {
 	//Campos de la clase
 	public int id;
-	public boolean esFinal;
-	public boolean esInicial;
-	public ArrayList<Integer> subEstados;
+	private boolean esFinal;
+	private boolean esInicial;
+	private ArrayList<Integer> subEstados;
 	private HashMap<Character, Estado> tabla;
 
 	/**
@@ -51,6 +52,36 @@ public class Estado {
 	*/
 	public ArrayList<Integer> getSubEstados(){
 		return subEstados;
+	}//Fin de getter
+	
+	/*
+	*Método que coloca el valor final
+	*/
+	public void setFinal(boolean b){
+		esFinal=b;
+	}
+	
+	/*
+	*Método que coloca el valor inicial
+	*/
+	public void setInicial(boolean b){
+		esInicial=b;
+	}
+	
+	/*
+	*Getter de esFinal
+	*@return: true si el estado es final
+	*/
+	public boolean seraFinal(){
+		return esFinal;
+	}
+	
+	/*
+	*Getter de esInicial
+	*@return: true si el estado es inicial
+	*/
+	public boolean seraInicial(){
+		return esInicial;
 	}
 	
 	/**
@@ -64,7 +95,7 @@ public class Estado {
 		for(Character o : alfabeto){
 			tabla.put(o,null);
 		}
-	}
+	}//Fin de crearLLaves
 	
 	/**
 	*Método que agrega un sub-estado al conjunto
@@ -75,7 +106,7 @@ public class Estado {
 		if( ! subEstados.contains(temp) ){
 			subEstados.add(temp);
 		}
-	}
+	}//Fin de agregarSubEstado
 	
 	/**
 	*Método que agrega un nuevo sub-estado al conjunto
@@ -105,28 +136,37 @@ public class Estado {
 		}
 	}//Fin del método comparar
 
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INICIO
 	/**
 	*Método para obtener los estados a los que llegas con cada caracter
 	*@return: un arreglo bidimensional donde arriba van los caracteres y abajo los id de los estados
 	*/
-	public char[][] getTransiciones(){
-		char[][] tablis = new char[2][ /*  Ay no sé que poner aquí */ ];
-		for(){
-			tablis[][]=;
+	public String[][] getTransiciones(){
+		Set<Character> llaves = tabla.keySet();
+		String[][] tablis = new String[2][ llaves.size() ];
+		
+		int i=0;
+		for( Character c : llaves ){
+			if(tabla.get(c) != null){
+				Estado e = (Estado)tabla.get(c);
+				if(e.esInicial && e.esFinal){
+					tablis[1][i] = "->" + "*" + Integer.toString(e.id);
+				}else if(e.esInicial){
+					tablis[1][i] = "->" + Integer.toString(e.id);
+				}else if(e.esFinal){
+					tablis[1][i] = "*" + Integer.toString(e.id);
+				}else{
+					tablis[1][i] = Integer.toString(e.id);
+				}
+			}
+			i++;
 		}
 		return tablis;
-	}
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN		
+	}//Fin de getTransiciones
 	
-	
-
 	/**
 	*Método que imprime las conexiones entre estados
 	*Este es un método temporal de uso exclusivo para los programadores.
 	*/
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Este método hay que quitarlo antes de entregar el proyecto Atte. U
 	public void imprimir(){
 		System.out.println("El estado " + id + "se conecta:");
 		for (Character c: tabla.keySet()){
