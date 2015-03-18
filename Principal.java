@@ -2,7 +2,7 @@
 *Clase principal del Proyecto final: Primera Parte
 *@author: Andrés Eugenio Sedano Casanova A00399842
 *@author: Ulises Torner Campuzano A01333456
-*@version: 17/03/2015/A
+*@version: 18/03/2015/A
 */
 
 //Imports
@@ -62,85 +62,78 @@ public class Principal {
 				tablaEstados[estadoActual][charActual].add(Character.getNumericValue(aux[i].charAt(1)));
 			}
 		}
-
-		System.out.println("Tamano del alfabeto: " + alfabeto.size());
-		System.out.println(Arrays.deepToString(tablaEstados));
-
+		
 		Estado q0 = new Estado(0, alfabeto);
 		q0.agregarSubEstado(0);
+		q0.setInicial(true);
 		
 		pila = new LinkedList<Estado>();
 		pila.add(q0);
 		int contador = 1;
 		
 		while(pila.size() != 0 ){
-			System.out.println("En la pila hay " + pila.size());
 			Estado temp = pila.pop();
-			System.out.println("De la pila se saco el estado " + temp.id);
 			
 			//Checar la función de transición por cada uno de los sub-estados de temp
 			for(Character c : alfabeto){
 				Estado link = calcularConexion(c,temp);
-				System.out.println("El estado prueba en " + c + " tiene como subestados:");
-
-				for(Integer i : link.getSubEstados()){
-					System.out.print(i + ", ");
-				}
-				System.out.println("");
-
 				if (link.id == -1){
 					link.id = contador;
 					contador++;
-					//temp.insertarEstado(c,link);//esto va despues de revisar siexiste o n
 					pila.addLast(link); 
 				}
-				///EEEEESSSSTTTTOOOO EEESSS IIIIMMMMPPPOOORRRTTAAAANNNTTEEEE
-				//pase lo que pase le agrega una conexion con el estado, no solo si es nuevo el estado
-				temp.insertarEstado(c,link);//esto va despues de revisar siexiste o no      
-
-
-			}	
+				temp.insertarEstado(c,link);
+			}
+			
+			//Revisa si el estado es final
+			for(int uli=0; uli<estadosFinales.length; uli++){
+				for( Integer i : temp.getSubEstados() ){
+					if( i.intValue() == Character.getNumericValue(estadosFinales[uli].charAt(1))){
+						temp.setFinal(true);
+					}	
+				}
+			}
 			estadosAFD.add(temp);
-
 		}
-
-
+		
+		//Tabla AFD en formato String[][]
+		String[][] tablaAFDimprimir = new String[estadosAFD.size()+1][alfabeto.size()+1];
+		tablaAFDimprimir[0][0] = "";
+		
+		int i=1;
 		for(Estado e : estadosAFD){
-			System.out.println("El estado " + e.id + " tiene:");
-			for(Integer i : e.getSubEstados()){
-				System.out.print(i+", ");
+			if(e.seraInicial() && e.seraFinal()){
+				tablaAFDimprimir[i][0] = "->*q" + e.id;
+			}else if(e.seraInicial()){
+				tablaAFDimprimir[i][0] = "->q" + e.id;
+			}else if(e.seraFinal()){
+				tablaAFDimprimir[i][0] = "*q" + e.id;
+			}else{
+				tablaAFDimprimir[i][0] = "q" + e.id;
+			}
+			
+			String[] pan = e.getTransiciones();
+			int j=1;
+			while(j < alfabeto.size()+1){
+				tablaAFDimprimir[i][j] = pan[j-1];
+				j++;
+			}
+			i++;
+		}
+		i=1;
+		for(Character c : alfabeto){
+			tablaAFDimprimir[0][i] = c.toString();
+			i++;
+		}
+		
+		//Imprimir la Tabla del AFD en el terminal
+		for(int u=0; u<=estadosAFD.size(); u++){
+			for(int v=0; v<=alfabeto.size(); v++){
+				System.out.print( tablaAFDimprimir[u][v] + "\t");
 			}
 			System.out.println("");
 		}
 		
-		imprimir();
-		
-		String[][] tablaAFDimprimir = new String[estadosAFD.size()+1][alfabeto.size()+1];
-		int i=1;
-		int j=1;
-		for(Estado e : estadosAFD){
-			if(e.seraInicial() && e.seraFinal()){
-				tablaAFDimprimir[0][i] = "->*q" + e.id;
-			}else if(e.seraInicial()){
-				tablaAFDimprimir[0][i] = "->q" + e.id;
-			}else if(e.seraFinal()){
-				tablaAFDimprimir[0][i] = "*q" + e.id;
-			}else{
-				tablaAFDimprimir[0][i] = "q" + e.id;
-			}
-			i++;
-			
-			String[] pan = e.getTransiciones();
-			for(String s : pan){
-				tablaAFDimprimir[j][i] = s;
-				j++;
-			}
-		}
-		i=1;
-		for(Character c : alfabeto){
-			tablaAFDimprimir[i][0] = c.toString();
-			i++;
-		}
 	}//Fin del main
 		
 	/*
@@ -203,6 +196,7 @@ public class Principal {
 	
 	/*
 	*Método imprimir, manda a llamar a Estado.imprimir() por cada Estado del AFD
+	*Sólo es para debugging
 	*/
 	public static void imprimir(){
 		System.out.println(estadosAFD.size());
