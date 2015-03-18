@@ -99,13 +99,13 @@ public class Principal {
 		int j=1;
 		for(Estado e : estadosAFD){
 			if(e.seraInicial() && e.seraFinal()){
-				tablaAFDimprimir[0][i] = "->*q" + e.id.toString();
+				tablaAFDimprimir[0][i] = "->*q" + e.id;
 			}else if(e.seraInicial()){
-				tablaAFDimprimir[0][i] = "->q" + e.id.toString();
+				tablaAFDimprimir[0][i] = "->q" + e.id;
 			}else if(e.seraFinal()){
-				tablaAFDimprimir[0][i] = "*q" + e.id.toString();
+				tablaAFDimprimir[0][i] = "*q" + e.id;
 			}else{
-				tablaAFDimprimir[0][i] = "q" + e.id.toString();
+				tablaAFDimprimir[0][i] = "q" + e.id;
 			}
 			i++;
 			
@@ -117,7 +117,7 @@ public class Principal {
 		}
 		i=1;
 		for(Character c : alfabeto){
-			tablaAFDimprimir[i][0] = c;
+			tablaAFDimprimir[i][0] = c.toString();
 			i++;
 		}
 	}//Fin del main
