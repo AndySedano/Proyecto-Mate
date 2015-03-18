@@ -164,10 +164,11 @@ public class Estado {
 	public void imprimir(){
 		System.out.println("El estado " + id + " se conecta:");
 		for (Character c: tabla.keySet()){
-			System.out.println("Con " + c + " con:");
-			for(int i : tabla.get(c).getSubEstados()){
-				System.out.println(i + ", ");
-			} 
+			if (tabla.get(c) != null){
+				System.out.println("Con " + c + " con el estado " + tabla.get(c).id);
+			}else{
+				System.out.println("Con " + c + " con el estado coladera");
+			}
         }
 	}//Fin del método imprimir
 	

@@ -80,12 +80,9 @@ public class Principal {
 				//tiene un estado con los mismos subestados que el otro
 				//creo también faltan conexiones entre estados
 
-				if (link.id == -1){
-					link.id = contador;
-					contador++;
-					temp.insertarEstado(c,link);//esto va despues de revisar si existe o no					
-					pila.push(link);
-				}
+				if (link.id == -1){     link.id = contador;     contador++;
+				temp.insertarEstado(c,link);//esto va despues de revisar siexiste o no      
+				pila.push(link); }
 
 			}	
 			estadosAFD.add(temp);
@@ -168,7 +165,6 @@ public class Principal {
 
 		if (gil==0){
 			Estado nuevoE = new Estado(-1, aux.getSubEstados() , alfabeto);
-						System.out.println("regresoEstadonuevo");
 			return nuevoE;
 
 		}
