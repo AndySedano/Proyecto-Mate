@@ -57,26 +57,13 @@ public class Principal {
 			}
 		}
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INICIO DE LA TRANSFORMACIÓN AFND->AFD
-
 		Estado q0 = new Estado(0, alfabeto);
 		q0.agregarSubEstado(0);
-
-		/*
-		Según uli esto ya no va por que al agregarlo a la
-		pila después se va a revisar todo y panes
-		
-		for(Character c : alfabeto){
-			Estado e = calcularConexion(c,q0);
-			q0.insertarEstado(c,e);
-		}
-		*/
 		
 		Stack<Estado> pila = new Stack<Estado>();
 		pila.push(q0);
 		
-		while(! pila.empty()){
-			
+		while(! pila.empty() ){
 			Estado temp = pila.pop();
 			
 			//Checar la función de transición por cada uno de los sub-estados de temp
@@ -88,30 +75,53 @@ public class Principal {
 			//Esto aún no está listo en lugar de contains debe revisar si
 			//tiene un estado con los mismos subestados que el otro
 			//creo también faltan conexiones entre estados
-			if( !(pila.contains(temp) && estadosAFD.contains(temp)) ){
-				
+			int gil=0;
+			for (Estado eAFD : estadosAFD){//Por todos los estados en el afd
+				if (eAFD.comparar(temp)){//Checa si alguno es igual a aux
+					gil=-1;
+				}
+			}
+			for (Estado eAFD : pila){//Por todos los estados en el afd
+				if (eAFD.comparar(temp)){//Checa si alguno es igual a aux
+					gil=-1;
+				}
+			}
+			
+			if( gil==0 ){
 				estadosAFD.add(temp);
 			}
 		}
 		
 		imprimir();
 		
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN DE LA TRANSFORMACIÓN AFND->AFD
-
-		//>>>>>>>>>>>>>>>>>Falta agregar un método que reciba los estados y regrese o imprima la tabla del AFD
-		String[][] tabla = tablaAFD();
-		for(){
-			for(){
-				System.out.print(tabla[i][j] + " ");
+		String[][] tablaAFDimprimir = new String[estadosAFD.size()+1][alfabeto.size()+1];
+		int i=1;
+		int j=1;
+		for(Estado e : estadosAFD){
+			if(e.seraInicial() && e.seraFinal()){
+				tablaAFDimprimir[0][i] = "->*q" + e.id.toString();
+			}else if(e.seraInicial()){
+				tablaAFDimprimir[0][i] = "->q" + e.id.toString();
+			}else if(e.seraFinal()){
+				tablaAFDimprimir[0][i] = "*q" + e.id.toString();
+			}else{
+				tablaAFDimprimir[0][i] = "q" + e.id.toString();
 			}
-			System.out.print("\n");
+			i++;
+			
+			String[] pan = e.getTransiciones();
+			for(String s : pan){
+				tablaAFDimprimir[j][i] = s;
+				j++;
+			}
 		}
-		//>>>>>>>>>>>>>>>>>Falta un método que minimice al AFD
-		
+		i=1;
+		for(Character c : alfabeto){
+			tablaAFDimprimir[i][0] = c;
+			i++;
+		}
 	}//Fin del main
-	
-	//Métodos de la Clase
-	
+		
 	/*
 	*Método calcularConexion, usa la función de transición para calcular los sub-estados a los cuales se conecta un estado dado
 	*@param: c - el caracter del alfabeto por el cual se da la transición
@@ -137,69 +147,6 @@ public class Principal {
 		Estado nuevoE = new Estado((estadosAFD.size()-1), aux.getSubEstados() , alfabeto);
 		return nuevoE;//si no regresa un nuevo estado con los subestados de aux
 	}//Fin de calcularConexion
-
-
-
-
-
-
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>INICIO
-	/**
-	*Metodo que regresa la tabla de AFD a partir de los estados
-	*@return: arreglo de strings
-	*/
-	public static String[][] tablaAFD(){
-		String[][] tablita = new String[estadosAFD.size()][alfabeto.size()];
-		int i,j;
-		i = 1;
-		for(Character chachacha : alfabeto ){
-			tablita[0][i] = chachacha;
-			i++;
-		}
-		i = 1;//reset el valor del índice
-		for( Estado est : estadosAFD){
-			tablita[i][0] = est.id;
-			i++;
-		}
-		
-	/*
-	Hay que ordenar los estados por id en la lista estadoAFD para que los imprima bonito
-	Si no en la tabla va a estar todo patatas :(
-
-	Ejemplo:
-				a	b	c	d
-		q5		q2	/	/	/
-		q2		q1	q2	q2	/
-		q0		q0	q1	q2	q3
-		q3		q4	q5	/	/
-		q4		/	q0	/	/
-		q1		/	q2	q1	q3
-		
-	*/
-	
-		//Esta parte está bien complicada :(
-		for(i=1; i<estadosAFD.size()-1; i++){
-			for(int j=1; j<alfabeto.size()-1; j++){
-				if( buscarEstado(tablita[i][0]) != null ){//Este if es como de seguridad añadida, pero en la vida real siempre debería existir el estado
-
-					buscarEstado(tablita[i][0]).getTransiciones();
-					
-					tablita[i][j] = 
-				}
-			}
-		}
-	}
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>FIN		
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	*Método para buscar un Estado con base a su id (nombre)

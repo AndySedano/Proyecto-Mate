@@ -140,23 +140,17 @@ public class Estado {
 	*Método para obtener los estados a los que llegas con cada caracter
 	*@return: un arreglo bidimensional donde arriba van los caracteres y abajo los id de los estados
 	*/
-	public String[][] getTransiciones(){
+	public String[] getTransiciones(){
 		Set<Character> llaves = tabla.keySet();
-		String[][] tablis = new String[2][ llaves.size() ];
+		String[] tablis = new String[ llaves.size() ];
 		
 		int i=0;
 		for( Character c : llaves ){
 			if(tabla.get(c) != null){
 				Estado e = (Estado)tabla.get(c);
-				if(e.esInicial && e.esFinal){
-					tablis[1][i] = "->" + "*" + Integer.toString(e.id);
-				}else if(e.esInicial){
-					tablis[1][i] = "->" + Integer.toString(e.id);
-				}else if(e.esFinal){
-					tablis[1][i] = "*" + Integer.toString(e.id);
-				}else{
-					tablis[1][i] = Integer.toString(e.id);
-				}
+				tablis[i] = "q" + Integer.toString(e.id);
+			}else{
+				tablis[i] = "/";
 			}
 			i++;
 		}
