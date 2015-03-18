@@ -166,7 +166,7 @@ public class Estado {
 		for (Character c: tabla.keySet()){
 			System.out.println("Con " + c + " con:");
 			for(int i : tabla.get(c).getSubEstados()){
-				System.out.print(i + ", ");
+				System.out.println(i + ", ");
 			} 
         }
 	}//Fin del método imprimir

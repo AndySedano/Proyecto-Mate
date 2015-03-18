@@ -11,13 +11,13 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Stack;
 
 public class Principal {
 	//Atributos públicos de la clase
 	static ArrayList<Estado> estadosAFD = new ArrayList<Estado>();//Estados del AFD
 	static ArrayList<Character> alfabeto = new ArrayList<Character>();//ArrayList del alfabeto
 	static LinkedList<Integer>[][] tablaEstados;//tabla de estados del AFND
+	static LinkedList<Estado> pila;
 
 	public static void main (String[] args){
 		Scanner leer = new Scanner(System.in);
@@ -37,6 +37,12 @@ public class Principal {
 
 		String estadoInicial = leer.nextLine();// El estado inicial
 		String[] estadosFinales = leer.nextLine().split(",");//Los estados finales
+
+		for(int i = 0; i<nEstados;i++){
+			for(int j=0; j<nCaracteres;j++ ){
+				tablaEstados[i][j] = new LinkedList();
+			}
+		}
 
 		String[] aux;
 		int estadoActual;
@@ -60,36 +66,39 @@ public class Principal {
 		Estado q0 = new Estado(0, alfabeto);
 		q0.agregarSubEstado(0);
 		
-		Stack<Estado> pila = new Stack<Estado>();
+		pila = new LinkedList<Estado>();
 		pila.push(q0);
+		int contador = 1;
 		
-		while(! pila.empty() ){
+		while(pila.size() != 0 ){
 			Estado temp = pila.pop();
 			
 			//Checar la función de transición por cada uno de los sub-estados de temp
 			for(Character c : alfabeto){
 				Estado link = calcularConexion(c,temp);
-				temp.insertarEstado(c,link);
-			}
-			
-			//Esto aún no está listo en lugar de contains debe revisar si
-			//tiene un estado con los mismos subestados que el otro
-			//creo también faltan conexiones entre estados
-			int gil=0;
-			for (Estado eAFD : estadosAFD){//Por todos los estados en el afd
-				if (eAFD.comparar(temp)){//Checa si alguno es igual a aux
-					gil=-1;
+				//Esto aún no está listo en lugar de contains debe revisar si
+				//tiene un estado con los mismos subestados que el otro
+				//creo también faltan conexiones entre estados
+
+				if (link.id == -1){
+					link.id = contador;
+					contador++;
+					temp.insertarEstado(c,link);//esto va despues de revisar si existe o no					
+					pila.push(link);
 				}
+
+			}	
+			estadosAFD.add(temp);
+
+		}
+
+
+		for(Estado e : estadosAFD){
+			System.out.println("El estado " + e.id + " tiene:");
+			for(Integer i : e.getSubEstados()){
+				System.out.print(i+", ");
 			}
-			for (Estado eAFD : pila){//Por todos los estados en el afd
-				if (eAFD.comparar(temp)){//Checa si alguno es igual a aux
-					gil=-1;
-				}
-			}
-			
-			if( gil==0 ){
-				estadosAFD.add(temp);
-			}
+			System.out.println("");
 		}
 		
 		imprimir();
@@ -139,13 +148,33 @@ public class Principal {
 			}
 		}
 
+		int gil = 0;
 		for (Estado eAFD : estadosAFD){//Por todos los estados en el afd
 			if (eAFD.comparar(aux)){//Checa si alguno es igual a aux
-				return eAFD;// si si regresa ese estado
+				gil = 1;
+				aux=eAFD;
 			}
 		}
-		Estado nuevoE = new Estado((estadosAFD.size()-1), aux.getSubEstados() , alfabeto);
-		return nuevoE;//si no regresa un nuevo estado con los subestados de aux
+		for (Estado eAFD : pila){//Por todos los estados en el afd
+			if (eAFD.comparar(aux)){//Checa si alguno es igual a aux
+				gil = 1;
+				aux=eAFD;
+			}
+		}
+		if(e.comparar(aux)){
+			gil = 1;
+			aux=e;
+		}
+
+		if (gil==0){
+			Estado nuevoE = new Estado(-1, aux.getSubEstados() , alfabeto);
+						System.out.println("regresoEstadonuevo");
+			return nuevoE;
+
+		}
+
+		return aux;
+
 	}//Fin de calcularConexion
 	
 	/**
