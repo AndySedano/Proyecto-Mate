@@ -115,6 +115,7 @@ public class Estado {
 	*/
 	public void insertarEstado(Character u, Estado e){
 		tabla.put(u,e);
+		System.out.println("Al estado " + id + " se le agrego una conexion en " + u + " con " + e.id);
 	}//Fin de insertatEstado
 	
 	/**

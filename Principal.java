@@ -63,26 +63,41 @@ public class Principal {
 			}
 		}
 
+		System.out.println("Tamano del alfabeto: " + alfabeto.size());
+		System.out.println(Arrays.deepToString(tablaEstados));
+
 		Estado q0 = new Estado(0, alfabeto);
 		q0.agregarSubEstado(0);
 		
 		pila = new LinkedList<Estado>();
-		pila.push(q0);
+		pila.add(q0);
 		int contador = 1;
 		
 		while(pila.size() != 0 ){
+			System.out.println("En la pila hay " + pila.size());
 			Estado temp = pila.pop();
+			System.out.println("De la pila se saco el estado " + temp.id);
 			
 			//Checar la función de transición por cada uno de los sub-estados de temp
 			for(Character c : alfabeto){
 				Estado link = calcularConexion(c,temp);
-				//Esto aún no está listo en lugar de contains debe revisar si
-				//tiene un estado con los mismos subestados que el otro
-				//creo también faltan conexiones entre estados
+				System.out.println("El estado prueba en " + c + " tiene como subestados:");
 
-				if (link.id == -1){     link.id = contador;     contador++;
+				for(Integer i : link.getSubEstados()){
+					System.out.print(i + ", ");
+				}
+				System.out.println("");
+
+				if (link.id == -1){
+					link.id = contador;
+					contador++;
+					//temp.insertarEstado(c,link);//esto va despues de revisar siexiste o n
+					pila.addLast(link); 
+				}
+				///EEEEESSSSTTTTOOOO EEESSS IIIIMMMMPPPOOORRRTTAAAANNNTTEEEE
+				//pase lo que pase le agrega una conexion con el estado, no solo si es nuevo el estado
 				temp.insertarEstado(c,link);//esto va despues de revisar siexiste o no      
-				pila.push(link); }
+
 
 			}	
 			estadosAFD.add(temp);
