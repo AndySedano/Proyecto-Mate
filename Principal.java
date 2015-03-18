@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class Principal {
 	//Atributos públicos de la clase
@@ -56,39 +57,21 @@ public class Principal {
 			}
 		}
 
-
-		//System.out.println(alfabeto.size());
-		//System.out.println(Arrays.deepToString(tablaEstados));
-
-
 		Estado q0 = new Estado(0, alfabeto);
 		q0.agregarSubEstado(0);
 		
-		LinkedList<Estado> fila = new LinkedList<Estado>();
-		fila.push(q0);
-
-		int contador=1;
-		int gil = 0;
+		Stack<Estado> pila = new Stack<Estado>();
+		pila.push(q0);
 		
-		while(fila.size() == 0 ){
-			Estado temp = fila.pop();
-			gil = 0;
+		while(! pila.empty() ){
+			Estado temp = pila.pop();
 			
 			//Checar la función de transición por cada uno de los sub-estados de temp
 			for(Character c : alfabeto){
 				Estado link = calcularConexion(c,temp);
-				for (Estado eAFD : fila){//Por todos los estados en la fila
-					if (eAFD.comparar(link)){//Checa si alguno es igual a aux
-						gil = 0;
-					}
-				}
-				if(gil==0){
-
-				}
 				temp.insertarEstado(c,link);
 			}
 			
-			/*
 			//Esto aún no está listo en lugar de contains debe revisar si
 			//tiene un estado con los mismos subestados que el otro
 			//creo también faltan conexiones entre estados
@@ -98,11 +81,15 @@ public class Principal {
 					gil=-1;
 				}
 			}
+			for (Estado eAFD : pila){//Por todos los estados en el afd
+				if (eAFD.comparar(temp)){//Checa si alguno es igual a aux
+					gil=-1;
+				}
+			}
 			
 			if( gil==0 ){
 				estadosAFD.add(temp);
 			}
-			*/
 		}
 		
 		imprimir();
@@ -157,7 +144,7 @@ public class Principal {
 				return eAFD;// si si regresa ese estado
 			}
 		}
-		Estado nuevoE = new Estado((-1), aux.getSubEstados() , alfabeto);
+		Estado nuevoE = new Estado((estadosAFD.size()-1), aux.getSubEstados() , alfabeto);
 		return nuevoE;//si no regresa un nuevo estado con los subestados de aux
 	}//Fin de calcularConexion
 	
@@ -178,7 +165,7 @@ public class Principal {
 	*Método imprimir, manda a llamar a Estado.imprimir() por cada Estado del AFD
 	*/
 	public static void imprimir(){
-		System.out.println("Tamano: " + estadosAFD.size());
+		System.out.println(estadosAFD.size());
 		for (Estado e : estadosAFD){
 			e.imprimir();
 		}
