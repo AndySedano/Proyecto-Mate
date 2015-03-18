@@ -165,6 +165,7 @@ public class Principal {
 	*Método imprimir, manda a llamar a Estado.imprimir() por cada Estado del AFD
 	*/
 	public static void imprimir(){
+		System.out.println(estadosAFD.size());
 		for (Estado e : estadosAFD){
 			e.imprimir();
 		}
