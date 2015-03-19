@@ -9,6 +9,8 @@
 *@version: 18/03/2015/A
 */
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -142,7 +144,9 @@ public class Estado {
 	*@return: un arreglo bidimensional donde arriba van los caracteres y abajo los id de los estados
 	*/
 	public String[] getTransiciones(){
-		Set<Character> llaves = tabla.keySet();
+		Set<Character> llavs = tabla.keySet();
+		LinkedList<Character> llaves = new LinkedList<Character>(llavs);
+		Collections.sort(llaves);
 		String[] tablis = new String[ llaves.size() ];
 		
 		int i=0;
@@ -157,20 +161,5 @@ public class Estado {
 		}
 		return tablis;
 	}//Fin de getTransiciones
-	
-	/**
-	*Método que imprime las conexiones entre estados
-	*Este es un método temporal de uso exclusivo para los programadores.
-	*/
-	public void imprimir(){
-		System.out.println("El estado " + id + " se conecta:");
-		for (Character c: tabla.keySet()){
-			if (tabla.get(c) != null){
-				System.out.println("Con " + c + " con el estado " + tabla.get(c).id);
-			}else{
-				System.out.println("Con " + c + " con el estado coladera");
-			}
-        }
-	}//Fin del método imprimir
 	
 }//Fin de la clase Estado
