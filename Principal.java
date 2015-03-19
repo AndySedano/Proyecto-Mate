@@ -6,21 +6,87 @@
 */
 
 //Imports
-import java.util.Scanner;
-import java.util.LinkedList;
-import java.util.ArrayList;
+import java.io.*;
+import java.awt.*;
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class Principal {
+
+public class Principal extends JFrame{
 	//Atributos públicos de la clase
-	static ArrayList<Estado> estadosAFD = new ArrayList<Estado>();//Estados del AFD
-	static ArrayList<Character> alfabeto = new ArrayList<Character>();//ArrayList del alfabeto
-	static LinkedList<Integer>[][] tablaEstados;//tabla de estados del AFND
+	static Scanner leer;
 	static LinkedList<Estado> pila;
+	static ArrayList<Estado> estadosAFD;//Estados del AFD
+	static ArrayList<Character> alfabeto;//ArrayList del alfabeto
+	static LinkedList<Integer>[][] tablaEstados;//tabla de estados del AFND
+	
+	//Atributos para la GUI
+	static JTable tabla;
+	static JLabel label;
+	static JFrame frame;
+	static JPanel panel;
+	static JButton boton;
+    static JFileChooser select;
+    static FileNameExtensionFilter textFilter;
 
-	public static void main (String[] args){
-		Scanner leer = new Scanner(System.in);
+    public static void main(String[] args){
+
+        //Inicializacion de componentes de la GUI
+        tabla = new JTable();
+        panel = new JPanel();
+        label = new JLabel("Time Remaining 300 seconds", SwingConstants.CENTER);
+        select = new JFileChooser();
+        boton = new JButton("Nuevo");
+        frame = new JFrame("Convertidor de AFND a AFD");
+        textFilter = new FileNameExtensionFilter("Text Files","txt");
+        
+        //Asignacion de valores a componentes
+        frame.add(label, SwingConstants.CENTER);
+        select.setFileFilter(textFilter);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        select.showOpenDialog(frame);
+        String[][] imprimir = sandias(select.getSelectedFile());
+        String[] head = imprimir[0];
+    	tabla = new JTable(imprimir, head);
+        frame.add(tabla, BorderLayout.CENTER);
+        frame.setSize(400,300);
+        frame.add(boton, BorderLayout.SOUTH);
+        frame.setVisible(true);
+        boton.addActionListener(new ActionListener() {
+        	//Para cada vez que se presiona el boton
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	frame.remove(tabla);
+            	select.showOpenDialog(frame);
+            	String[][] imprimir = sandias(select.getSelectedFile());
+            	String[] head = imprimir[0];
+            	tabla = new JTable(imprimir, head);
+                frame.add(tabla, BorderLayout.CENTER);
+                frame.revalidate();
+            	frame.repaint();       
+            }
+        }); 
+    }
+
+
+	public static String[][] sandias (File f){
+		try{
+			leer = new Scanner(f);
+		}catch(IOException | NullPointerException n){
+			JOptionPane.showMessageDialog(null, "Archivo no valido");
+			System.exit(0);
+		}
+
+		estadosAFD = new ArrayList<Estado>();
+		alfabeto = new ArrayList<Character>();
 
 		String[] estados = leer.nextLine().split(",");//Lista de estados del automata
 		String[] auxAlf = leer.nextLine().split(",");//alfabeto auxiliar para meterlo en un ArrayList
@@ -95,11 +161,10 @@ public class Principal {
 			}
 			estadosAFD.add(temp);
 		}
-		
+
 		//Tabla AFD en formato String[][]
 		String[][] tablaAFDimprimir = new String[estadosAFD.size()+1][alfabeto.size()+1];
 		tablaAFDimprimir[0][0] = "";
-		
 		int i=1;
 		for(Estado e : estadosAFD){
 			if(e.seraInicial() && e.seraFinal()){
@@ -133,8 +198,10 @@ public class Principal {
 			}
 			System.out.println("");
 		}
+
+		return tablaAFDimprimir;
 		
-	}//Fin del main
+	}//Fin del main sandias
 		
 	/*
 	*Método calcularConexion, usa la función de transición para calcular los sub-estados a los cuales se conecta un estado dado
@@ -153,25 +220,25 @@ public class Principal {
 			}
 		}
 
-		int gil = 0;
+		int bandera = 0;
 		for (Estado eAFD : estadosAFD){//Por todos los estados en el afd
 			if (eAFD.comparar(aux)){//Checa si alguno es igual a aux
-				gil = 1;
+				bandera = 1;
 				aux=eAFD;
 			}
 		}
 		for (Estado eAFD : pila){//Por todos los estados en el afd
 			if (eAFD.comparar(aux)){//Checa si alguno es igual a aux
-				gil = 1;
+				bandera = 1;
 				aux=eAFD;
 			}
 		}
 		if(e.comparar(aux)){
-			gil = 1;
+			bandera = 1;
 			aux=e;
 		}
 
-		if (gil==0){
+		if (bandera==0){
 			Estado nuevoE = new Estado(-1, aux.getSubEstados() , alfabeto);
 			return nuevoE;
 
@@ -193,16 +260,5 @@ public class Principal {
 		}
 		return null;
 	}
-	
-	/*
-	*Método imprimir, manda a llamar a Estado.imprimir() por cada Estado del AFD
-	*Sólo es para debugging
-	*/
-	public static void imprimir(){
-		System.out.println(estadosAFD.size());
-		for (Estado e : estadosAFD){
-			e.imprimir();
-		}
-	}//Fin de imprimir
 	
 }//Fin de la clase
