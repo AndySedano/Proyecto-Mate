@@ -37,6 +37,9 @@ public class Principal extends JFrame{
     static JFileChooser select;
     static FileNameExtensionFilter textFilter;
 
+	/*
+	*Método principal que inicializa todos los componetes y manda a llamar a actualizar GUI
+	*/
     public static void main(String[] args){
 
         //Inicializacion de componentes de la GUI
@@ -68,7 +71,10 @@ public class Principal extends JFrame{
             }
         }); 
     }
-
+	
+	/*
+	*Método que actualiza la GUI
+	*/
     public static void actualizarGUI(){
     	panel.removeAll();
 
@@ -121,7 +127,15 @@ public class Principal extends JFrame{
         frame.revalidate();
     	frame.repaint();
     }
-
+	
+	/*
+	*Método "sandías" anteriormente era el main, pero con la llegada de la GUI
+	*todo cambió, y el éste fue desplazado por otro main,
+	*así fue como se renombro como sandías, esperando a ser llamado por el nuevo main
+	*y así demostrar su verdadera habilidad en la transformación de autómatas
+	*@param: f el archivo que fue seleccionado por el usuario
+	*@return: la tabla del AFD que se crea
+	*/
 	public static String[][] sandias (File f){
 		try{
 			leer = new Scanner(f);
