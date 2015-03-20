@@ -95,7 +95,7 @@ public class Principal extends JFrame{
 
     	int i=0;
     	for(Estado e : estadosAFD){
-    		estadosAFDTemp[i][0] = Integer.toString(e.id);
+    		estadosAFDTemp[i][0] = "q" + e.id;
     		estadosAFDTemp[i][1] = e.getSubEstados().toString();
     		i++;
     	}
@@ -160,7 +160,7 @@ public class Principal extends JFrame{
 
 		tablaEstados = new LinkedList[nEstados][nCaracteres];
 
-		String estadoInicial = leer.nextLine();// El estado inicial
+		int estadoInicial = Character.getNumericValue(leer.nextLine().charAt(1));// El estado inicial
 		String[] estadosFinales = leer.nextLine().split(",");//Los estados finales
 
 		for(int i = 0; i<nEstados;i++){
@@ -189,7 +189,7 @@ public class Principal extends JFrame{
 		}
 		
 		Estado q0 = new Estado(0, alfabeto);
-		q0.agregarSubEstado(0);
+		q0.agregarSubEstado(estadoInicial);
 		q0.setInicial(true);
 		
 		pila = new LinkedList<Estado>();
