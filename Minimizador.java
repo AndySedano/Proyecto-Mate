@@ -1,4 +1,4 @@
-/**
+ /**
 *Clase minimizadora del Proyecto final: Primera Parte
 *@author: Andrés Eugenio Sedano Casanova A00399842
 *@author: Ulises Torner Campuzano A01333456

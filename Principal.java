@@ -25,10 +25,11 @@ public class Principal extends JFrame{
 	static LinkedList<Estado> pila;
 	static ArrayList<Estado> estadosAFD;//Estados del AFD
 	static ArrayList<Character> alfabeto;//ArrayList del alfabeto
-	static LinkedList<Integer>[][] tablaEstados;//tabla de estados del AFND
+	static LinkedList<Integer>[][] tablaEstados;//tablaGUI de estados del AFND
 	
 	//Atributos para la GUI
-	static JTable tabla;
+	static JTable tablaGUI;
+	static JScrollPane jsp;
 	static JLabel label;
 	static JFrame frame;
 	static JPanel panel;
@@ -39,43 +40,87 @@ public class Principal extends JFrame{
     public static void main(String[] args){
 
         //Inicializacion de componentes de la GUI
-        tabla = new JTable();
         panel = new JPanel();
-        label = new JLabel("Time Remaining 300 seconds", SwingConstants.CENTER);
+        jsp = new JScrollPane(panel);
         select = new JFileChooser();
         boton = new JButton("Nuevo");
         frame = new JFrame("Convertidor de AFND a AFD");
         textFilter = new FileNameExtensionFilter("Text Files","txt");
         
         //Asignacion de valores a componentes
-        frame.add(label, SwingConstants.CENTER);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        frame.add(jsp, BorderLayout.CENTER);
         select.setFileFilter(textFilter);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        select.showOpenDialog(frame);
-        String[][] imprimir = sandias(select.getSelectedFile());
-        String[] head = imprimir[0];
-    	tabla = new JTable(imprimir, head);
-        frame.add(tabla, BorderLayout.CENTER);
-        frame.setSize(400,300);
+        frame.setSize(400,400);
         frame.add(boton, BorderLayout.SOUTH);
         frame.setVisible(true);
+        jsp.setVisible(true);
+
+        actualizarGUI();
+
         boton.addActionListener(new ActionListener() {
         	//Para cada vez que se presiona el boton
             @Override
             public void actionPerformed(ActionEvent e) {
-            	frame.remove(tabla);
-            	select.showOpenDialog(frame);
-            	String[][] imprimir = sandias(select.getSelectedFile());
-            	String[] head = imprimir[0];
-            	tabla = new JTable(imprimir, head);
-                frame.add(tabla, BorderLayout.CENTER);
-                frame.revalidate();
-            	frame.repaint();       
+            	actualizarGUI();       
             }
         }); 
     }
 
+    public static void actualizarGUI(){
+    	panel.removeAll();
+
+    	select.showOpenDialog(frame);
+    	
+    	boolean sePuedeMin = false;
+    	String[][] tablaAFDTemp = sandias(select.getSelectedFile());
+    	String[][] estadosAFDTemp = new String[estadosAFD.size()][2];
+    	if(tablaAFDTemp.length>2){
+    		String[][] tablaAFDMinTemp = new String[tablaAFDTemp.length][];
+				for(int i = 0; i < tablaAFDTemp.length; i++){
+	   		 		tablaAFDMinTemp[i] = tablaAFDTemp[i].clone();
+	   			}
+	   			Minimizador.minimizar(tablaAFDMinTemp);
+	   			sePuedeMin = !Arrays.deepEquals(tablaAFDMinTemp, tablaAFDTemp);
+	    	
+    	}
+
+    	int i=0;
+    	for(Estado e : estadosAFD){
+    		estadosAFDTemp[i][0] = Integer.toString(e.id);
+    		estadosAFDTemp[i][1] = e.getSubEstados().toString();
+    		i++;
+    	}
+
+    	label = new JLabel("Tabla de estados", SwingConstants.CENTER);
+    	panel.add(label);
+    	tablaGUI = new JTable(estadosAFDTemp, estadosAFDTemp[0]);
+    	panel.add(tablaGUI);
+    	label = new JLabel("Tabla de transiciones", SwingConstants.CENTER);
+    	panel.add(label);
+    	tablaGUI = new JTable(tablaAFDTemp, tablaAFDTemp[0]);
+    	panel.add(tablaGUI);
+
+    	if(sePuedeMin){
+	    	String[][] tablaAFDMinTemp = new String[tablaAFDTemp.length][];
+				for(i = 0; i < tablaAFDTemp.length; i++){
+	   		 		tablaAFDMinTemp[i] = tablaAFDTemp[i].clone();
+	   			}
+	    	Minimizador.minimizar(tablaAFDMinTemp);
+	    	label = new JLabel("Tabla minimizada", SwingConstants.CENTER);
+	    	panel.add(label);
+	    	tablaGUI = new JTable(tablaAFDMinTemp, tablaAFDMinTemp[0]);
+	    	panel.add(tablaGUI);
+	    }else{
+	    	label = new JLabel("No se puede minimizar el grafo", SwingConstants.CENTER);
+	    	panel.add(label);
+	    }
+
+        frame.revalidate();
+    	frame.repaint();
+    }
 
 	public static String[][] sandias (File f){
 		try{
@@ -164,7 +209,7 @@ public class Principal extends JFrame{
 
 		//Tabla AFD en formato String[][]
 		String[][] tablaAFDimprimir = new String[estadosAFD.size()+1][alfabeto.size()+1];
-		tablaAFDimprimir[0][0] = "";
+		tablaAFDimprimir[0][0] = "  ";
 		int i=1;
 		for(Estado e : estadosAFD){
 			if(e.seraInicial() && e.seraFinal()){
@@ -187,7 +232,7 @@ public class Principal extends JFrame{
 		}
 		i=1;
 		for(Character c : alfabeto){
-			tablaAFDimprimir[0][i] = c.toString();
+			tablaAFDimprimir[0][i] = c.toString() + "  ";
 			i++;
 		}
 		
@@ -210,7 +255,7 @@ public class Principal extends JFrame{
 	*@return: regresa un estado del AFD con sus sub-estados del cual se conecta "e" con la transición por medio de "c"
 	*/
 	public static Estado calcularConexion(Character c, Estado e){
-		Estado aux = new Estado(-1, alfabeto);//Nuevo estado auxiliar para saber si el estado(con todo y subestados) ya existe en la tabla de estadosAFD
+		Estado aux = new Estado(-1, alfabeto);//Nuevo estado auxiliar para saber si el estado(con todo y subestados) ya existe en la tablaGUI de estadosAFD
 
 		for(int sub : e.getSubEstados()){//Para todos los subestados del estado
 			for(int subEstado : tablaEstados[sub][alfabeto.indexOf(c)]){
